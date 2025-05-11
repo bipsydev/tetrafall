@@ -27,6 +27,16 @@ import ktx.graphics.use
  */
 object TetraFall : KtxGame<KtxScreen>() {
 
+    /** Sprite batch for drawing textures to the screen. */
+    val batch by lazy { SpriteBatch() }
+
+    /** A renderer for primitive shapes. */
+    val shapes by lazy { ShapeRenderer() }
+
+    /** The global viewport that maintains an aspect ratio and PPI density. */
+    val viewport by lazy { LetterboxingViewport(96f, 96f,
+                                                16f / 9f) }
+
     /**
      * create override function
      *--------------------------
@@ -35,7 +45,7 @@ object TetraFall : KtxGame<KtxScreen>() {
      * but NO OpenGL Rendering Context is available yet at this point.
      */
     override fun create() {
-        KtxAsync.initiate()
+        KtxAsync.initiate() // needed to initialize ktx.async coroutines.
 
         addScreen(FirstScreen())
         setScreen<FirstScreen>()
