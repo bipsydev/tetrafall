@@ -19,5 +19,5 @@ fun main() {
         width = -1
         height = -1
     }
-    TeaApplication(TetraFall(), config)
+    TeaApplication(TetraFall, config)
 }

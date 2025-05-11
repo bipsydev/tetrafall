@@ -10,7 +10,7 @@ import zone.slime.tetrafall.TetraFall
 class AndroidLauncher : AndroidApplication() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initialize(TetraFall(), AndroidApplicationConfiguration().apply {
+        initialize(TetraFall, AndroidApplicationConfiguration().apply {
             // Configure your application here.
             useImmersiveMode = true // Recommended, but not required.
         })
