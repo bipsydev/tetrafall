@@ -1,17 +1,12 @@
 package zone.slime.tetrafall
 
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.Texture.TextureFilter.Linear
+import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
-import ktx.app.clearScreen
-import ktx.assets.disposeSafely
-import ktx.assets.toInternalFile
 import ktx.async.KtxAsync
 import ktx.graphics.LetterboxingViewport
-import ktx.graphics.use
 
 /**
  *******************************************************************************
@@ -27,14 +22,20 @@ import ktx.graphics.use
  */
 object TetraFall : KtxGame<KtxScreen>() {
 
+    /**
+     * Asset Manager for loading and freeing assets.
+     * KTX provides a `load` extension function that can be used as a delegate.
+     */
+    val ASSETS by lazy { AssetManager() }
+
     /** Sprite batch for drawing textures to the screen. */
-    val batch by lazy { SpriteBatch() }
+    val BATCH by lazy { SpriteBatch() }
 
     /** A renderer for primitive shapes. */
-    val shapes by lazy { ShapeRenderer() }
+    val SHAPES by lazy { ShapeRenderer() }
 
     /** The global viewport that maintains an aspect ratio and PPI density. */
-    val viewport by lazy { LetterboxingViewport(96f, 96f,
+    val VIEWPORT by lazy { LetterboxingViewport(96f, 96f,
                                                 16f / 9f) }
 
     /**
@@ -47,12 +48,15 @@ object TetraFall : KtxGame<KtxScreen>() {
     override fun create() {
         KtxAsync.initiate() // needed to initialize ktx.async coroutines.
 
-        addScreen(FirstScreen())
-        setScreen<FirstScreen>()
+        // instantiate a GameScreen and add it to the screen cache
+        addScreen(GameScreen())
+        // set it as the active running screen for the game
+        setScreen<GameScreen>()
     }
 }
 
 
+/*
 /**=============================================================================
  * FirstScreen test screen class
  *==============================================================================
@@ -101,3 +105,4 @@ class FirstScreen : KtxScreen {
         batch.disposeSafely()
     }
 }
+*/

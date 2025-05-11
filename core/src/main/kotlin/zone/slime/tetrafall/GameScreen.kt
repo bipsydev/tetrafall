@@ -2,25 +2,27 @@ package zone.slime.tetrafall
 
 import com.badlogic.gdx.graphics.Texture
 import ktx.app.KtxScreen
-import ktx.assets.toInternalFile
+import ktx.assets.*
+
+import zone.slime.tetrafall.TetraFall.ASSETS
 
 class GameScreen : KtxScreen {
 
+    // store texture references here, load them with the global asset manager
     companion object {
-        private fun txStr(i: Int) = "PhotonicBox/fotonicbox$i.png".toInternalFile()
+        /** Helper function to build the asset string for fotonicbox#.png */
+        private fun txStr(i: Int) = "PhotonicBox/fotonicbox$i.png"
+
+        // store all images in this array
+        val TX_FOTONICBOX = Array(9) {
+            // each element is initialized with this lambda, and `it` is index
+            ASSETS.load<Texture>(txStr(it + 1))
+        }
 
         // Images Source: https://el-chucho.itch.io/fotonicboxes
-        val TX_FOTONICBOX1 by lazy { Texture(txStr(1)) }
-        val TX_FOTONICBOX2 by lazy { Texture(txStr(2)) }
-        val TX_FOTONICBOX3 by lazy { Texture(txStr(3)) }
-        val TX_FOTONICBOX4 by lazy { Texture(txStr(4)) }
-        val TX_FOTONICBOX5 by lazy { Texture(txStr(5)) }
-        val TX_FOTONICBOX6 by lazy { Texture(txStr(6)) }
-        val TX_FOTONICBOX7 by lazy { Texture(txStr(7)) }
-        val TX_FOTONICBOX8 by lazy { Texture(txStr(8)) }
-        val TX_FOTONICBOX9 by lazy { Texture(txStr(9)) }
     }
 
+    // scene active running time
     var time: Double = 0.0
 
     /**
@@ -29,11 +31,12 @@ class GameScreen : KtxScreen {
      * Loads texture resources and begins the game.
      */
     init {
-        // allocation of textures should happen here
-
+        // finish loading all elements in this texture asset array
+        TX_FOTONICBOX.forEach { it.finishLoading() }
     }
 
     override fun show() {
+
     }
 
     override fun render(delta: Float) {
