@@ -1,5 +1,7 @@
 package zone.slime.tetrafall
 
+import com.badlogic.gdx.Application.LOG_DEBUG
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -20,23 +22,49 @@ import ktx.graphics.LetterboxingViewport
  * The `KtxScreen`s are stored in a cache with `TetraFall.addScreen()`
  * and can be set to the currently active running view with `setScreen()`.
  */
-object TetraFall : KtxGame<KtxScreen>() {
+object TetraFall : KtxGame<KtxScreen>()
+{
 
     /**
      * Asset Manager for loading and freeing assets.
      * KTX provides a `load` extension function that can be used as a delegate.
      */
-    val ASSETS by lazy { AssetManager() }
+    val ASSETS by lazy {    // ASSETS is lazy-initialized...
+        AssetManager().also {   // ... with `AssetManager()`, and also...
+            LOG.debug { "Initialized global AssetManager Tetrafall.ASSETS." }
+        }
+    }
 
     /** Sprite batch for drawing textures to the screen. */
-    val BATCH by lazy { SpriteBatch() }
+    val BATCH by lazy {
+        SpriteBatch().also {
+            LOG.debug { "Initialized global SpriteBatch TetraFall.BATCH." }
+        }
+    }
 
     /** A renderer for primitive shapes. */
-    val SHAPES by lazy { ShapeRenderer() }
+    val SHAPES by lazy {
+        ShapeRenderer().also {
+            LOG.debug { "Initialized global ShapeRenderer TetraFall.SHAPES." }
+        }
+    }
 
     /** The global viewport that maintains an aspect ratio and PPI density. */
-    val VIEWPORT by lazy { LetterboxingViewport(96f, 96f,
-                                                16f / 9f) }
+    val VIEWPORT by lazy {
+        LetterboxingViewport(96f, 96f,
+                             16f / 9f).also {
+            LOG.debug { "Initialized global LetterboxingViewport TetraFall.VIEWPORT." }
+        }
+    }
+
+    private val LOG by lazy {
+        Gdx.app.logLevel = LOG_DEBUG    // set DEBUG logging level (everything)
+        PrettyLogger<TetraFall>().also {
+            it.debug { "Initialized private TetraFall.LOG. Gdx.app.logLevel = ${Gdx.app.logLevel}" }
+            it.info { "info tag example" }
+            it.error { "error tag example" }
+        }
+    }
 
     /**
      * create override function
@@ -46,6 +74,7 @@ object TetraFall : KtxGame<KtxScreen>() {
      * but NO OpenGL Rendering Context is available yet at this point.
      */
     override fun create() {
+        LOG.debug { "TetraFall.create() entered..." }
         KtxAsync.initiate() // needed to initialize ktx.async coroutines.
 
         // instantiate a GameScreen and add it to the screen cache
@@ -63,7 +92,8 @@ object TetraFall : KtxGame<KtxScreen>() {
  * a default screen generated with the libKTX template.
  * Just loads and renders a texture.
  */
-class FirstScreen : KtxScreen {
+class FirstScreen : KtxScreen
+{
     /** A default texture, a libKTX logo.  */
     private val image = Texture(
         // use KTX's `String?.toInternalFile` function
