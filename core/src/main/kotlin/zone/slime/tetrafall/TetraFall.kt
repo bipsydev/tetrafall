@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
+import ktx.assets.async.AssetStorage
 import ktx.async.KtxAsync
 import ktx.graphics.LetterboxingViewport
 
@@ -29,11 +30,7 @@ object TetraFall : KtxGame<KtxScreen>()
      * Asset Manager for loading and freeing assets.
      * KTX provides a `load` extension function that can be used as a delegate.
      */
-    val ASSETS by lazy {    // ASSETS is lazy-initialized...
-        AssetManager().also {   // ... with `AssetManager()`, and also...
-            LOG.debug { "Initialized global AssetManager Tetrafall.ASSETS." }
-        }
-    }
+    lateinit var ASSETS: AssetStorage
 
     /** Sprite batch for drawing textures to the screen. */
     val BATCH by lazy {
@@ -76,6 +73,9 @@ object TetraFall : KtxGame<KtxScreen>()
     override fun create() {
         LOG.debug { "TetraFall.create() entered..." }
         KtxAsync.initiate() // needed to initialize ktx.async coroutines.
+
+        ASSETS = AssetStorage()
+        LOG.debug { "Initialized global AssetManager Tetrafall.ASSETS." }
 
         // instantiate a GameScreen and add it to the screen cache
         addScreen(GameScreen())

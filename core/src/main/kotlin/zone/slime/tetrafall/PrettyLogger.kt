@@ -1,9 +1,5 @@
 package zone.slime.tetrafall
 
-import com.badlogic.gdx.Application.LOG_DEBUG
-import com.badlogic.gdx.Application.LOG_INFO
-import com.badlogic.gdx.Application.LOG_ERROR
-import com.badlogic.gdx.Gdx
 import ktx.log.DEBUG
 import ktx.log.ERROR
 import ktx.log.INFO
