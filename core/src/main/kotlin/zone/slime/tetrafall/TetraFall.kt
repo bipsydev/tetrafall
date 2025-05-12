@@ -2,7 +2,7 @@ package zone.slime.tetrafall
 
 import com.badlogic.gdx.Application.LOG_DEBUG
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import ktx.app.KtxGame
@@ -51,6 +51,12 @@ object TetraFall : KtxGame<KtxScreen>()
         LetterboxingViewport(96f, 96f,
                              16f / 9f).also {
             LOG.debug { "Initialized global LetterboxingViewport TetraFall.VIEWPORT." }
+        }
+    }
+
+    val FONT by lazy {
+        BitmapFont().also {
+            LOG.debug { "Initialized global BitmapFont TetraFall.FONT." }
         }
     }
 

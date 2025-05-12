@@ -1,11 +1,17 @@
 package zone.slime.tetrafall
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import kotlinx.coroutines.launch
 import ktx.app.KtxScreen
 import ktx.async.KtxAsync
+import ktx.graphics.use
 
 import zone.slime.tetrafall.TetraFall.ASSETS
+import zone.slime.tetrafall.TetraFall.BATCH
+import zone.slime.tetrafall.TetraFall.FONT
+import zone.slime.tetrafall.TetraFall.SHAPES
 
 /**
  *******************************************************************************
@@ -96,7 +102,17 @@ class GameScreen : KtxScreen {
         if (!TX_FOTONICBOX_LOADED)
         {
             // display text
-
+            BATCH.use {
+                FONT.color = Color.WHITE
+                FONT.draw(BATCH, "LOADING...", 32.0f, 32.0f)
+            }
+        }
+        else
+        {
+            SHAPES.use(ShapeRenderer.ShapeType.Filled) {
+                SHAPES.color = Color.GREEN
+                SHAPES.rect(32.0f, 32.0f, 256.0f, 256.0f)
+            }
         }
 
         time += delta   // update scene time
