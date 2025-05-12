@@ -6,7 +6,7 @@ Initially generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff). <
 This project was generated with a Kotlin project template that includes Kotlin application launchers and [KTX](https://libktx.github.io/) utilities.
 
 Assets used:
-- <a href="https://el-chucho.itch.io/fotonicboxes"><img src="https://img.itch.zone/aW1hZ2UvMTY0MDgxOS85NjUwODEwLmdpZg==/347x500/xF5Xaw.gif" alt="\[icon\]" width="24" height="24" style="vertical-align: middle;"/> FonoticBoxes by El Chucho</a>
+- <a href="https://el-chucho.itch.io/fotonicboxes"><img src="https://img.itch.zone/aW1hZ2UvMTY0MDgxOS85NjUwODEwLmdpZg==/347x500/xF5Xaw.gif" alt="\[icon\]" width="24" height="24" style="horizontal-align: middle;"/></a> [FonoticBoxes by El Chucho](https://el-chucho.itch.io/fotonicboxes)
 
 ## Platforms
 
