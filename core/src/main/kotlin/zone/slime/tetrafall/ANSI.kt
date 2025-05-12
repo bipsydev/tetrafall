@@ -1,87 +1,91 @@
 package zone.slime.tetrafall
 
+import com.badlogic.gdx.Application.ApplicationType
+import com.badlogic.gdx.Gdx
+
 /**
- * https://www.w3schools.blog/ansi-colors-java
+ *******************************************************************************
+ * `ANSI` singleton - libGDX logging-friendly ANSI coloring codes.
+ *******************************************************************************
+ * Designed to be used with `PrettyLogger`. Defines ANSI color & formatting
+ * escape strings ONLY on desktop (`lwjgl3:*`). Otherwise defines empty strings,
+ * so that no formatting is applied on other platforms (Android, web).
+ *
+ * Used as reference:
+ * [W3Schools' ANSI Color Codes - Java](https://www.w3schools.blog/ansi-colors-java)
  */
 object ANSI {
-    // Reset
-    const val RESET: String = "\u001b[0m" // Text Reset
+    /** Helper to determine if code should be defined or not. */
+    private val isDesktop get() = Gdx.app.type == ApplicationType.Desktop
 
-    // Bold toggle
-    const val BOLD: String = "\u001b[1m"
+    /** Helper to generate a code for a property. */
+    private fun code(s: String) = if (isDesktop) "\u001b[$s" else ""
 
-    // Italics toggle (if supported by terminal)
-    const val ITALIC: String = "\u001b[3m"
+    val RESET = code("0m")
+    val BOLD = code("1m")
+    val ITALIC = code("3m")
+    val UNDERLINE = code("4m")
 
-    const val UNDERLINE: String = "\u001b[4m"
+    val BLACK = code("0;30m")
+    val RED = code("0;31m")
+    val GREEN = code("0;32m")
+    val YELLOW = code("0;33m")
+    val BLUE = code("0;34m")
+    val PURPLE = code("0;35m")
+    val CYAN = code("0;36m")
+    val WHITE = code("0;37m")
 
-    // Regular Colors
-    const val BLACK: String = "\u001b[0;30m" // BLACK
-    const val RED: String = "\u001b[0;31m" // RED
-    const val GREEN: String = "\u001b[0;32m" // GREEN
-    const val YELLOW: String = "\u001b[0;33m" // YELLOW
-    const val BLUE: String = "\u001b[0;34m" // BLUE
-    const val PURPLE: String = "\u001b[0;35m" // PURPLE
-    const val CYAN: String = "\u001b[0;36m" // CYAN
-    const val WHITE: String = "\u001b[0;37m" // WHITE
+    val BLACK_BOLD = code("1;30m")
+    val RED_BOLD = code("1;31m")
+    val GREEN_BOLD = code("1;32m")
+    val YELLOW_BOLD = code("1;33m")
+    val BLUE_BOLD = code("1;34m")
+    val PURPLE_BOLD = code("1;35m")
+    val CYAN_BOLD = code("1;36m")
+    val WHITE_BOLD = code("1;37m")
 
-    // Bold
-    const val BLACK_BOLD: String = "\u001b[1;30m" // BLACK
-    const val RED_BOLD: String = "\u001b[1;31m" // RED
-    const val GREEN_BOLD: String = "\u001b[1;32m" // GREEN
-    const val YELLOW_BOLD: String = "\u001b[1;33m" // YELLOW
-    const val BLUE_BOLD: String = "\u001b[1;34m" // BLUE
-    const val PURPLE_BOLD: String = "\u001b[1;35m" // PURPLE
-    const val CYAN_BOLD: String = "\u001b[1;36m" // CYAN
-    const val WHITE_BOLD: String = "\u001b[1;37m" // WHITE
+    val BLACK_UNDERLINED = code("4;30m")
+    val RED_UNDERLINED = code("4;31m")
+    val GREEN_UNDERLINED = code("4;32m")
+    val YELLOW_UNDERLINED = code("4;33m")
+    val BLUE_UNDERLINED = code("4;34m")
+    val PURPLE_UNDERLINED = code("4;35m")
+    val CYAN_UNDERLINED = code("4;36m")
+    val WHITE_UNDERLINED = code("4;37m")
 
-    // Underline
-    const val BLACK_UNDERLINED: String = "\u001b[4;30m" // BLACK
-    const val RED_UNDERLINED: String = "\u001b[4;31m" // RED
-    const val GREEN_UNDERLINED: String = "\u001b[4;32m" // GREEN
-    const val YELLOW_UNDERLINED: String = "\u001b[4;33m" // YELLOW
-    const val BLUE_UNDERLINED: String = "\u001b[4;34m" // BLUE
-    const val PURPLE_UNDERLINED: String = "\u001b[4;35m" // PURPLE
-    const val CYAN_UNDERLINED: String = "\u001b[4;36m" // CYAN
-    const val WHITE_UNDERLINED: String = "\u001b[4;37m" // WHITE
+    val BLACK_BACKGROUND = code("40m")
+    val RED_BACKGROUND = code("41m")
+    val GREEN_BACKGROUND = code("42m")
+    val YELLOW_BACKGROUND = code("43m")
+    val BLUE_BACKGROUND = code("44m")
+    val PURPLE_BACKGROUND = code("45m")
+    val CYAN_BACKGROUND = code("46m")
+    val WHITE_BACKGROUND = code("47m")
 
-    // Background
-    const val BLACK_BACKGROUND: String = "\u001b[40m" // BLACK
-    const val RED_BACKGROUND: String = "\u001b[41m" // RED
-    const val GREEN_BACKGROUND: String = "\u001b[42m" // GREEN
-    const val YELLOW_BACKGROUND: String = "\u001b[43m" // YELLOW
-    const val BLUE_BACKGROUND: String = "\u001b[44m" // BLUE
-    const val PURPLE_BACKGROUND: String = "\u001b[45m" // PURPLE
-    const val CYAN_BACKGROUND: String = "\u001b[46m" // CYAN
-    const val WHITE_BACKGROUND: String = "\u001b[47m" // WHITE
+    val BLACK_BRIGHT = code("0;90m")
+    val RED_BRIGHT = code("0;91m")
+    val GREEN_BRIGHT = code("0;92m")
+    val YELLOW_BRIGHT = code("0;93m")
+    val BLUE_BRIGHT = code("0;94m")
+    val PURPLE_BRIGHT = code("0;95m")
+    val CYAN_BRIGHT = code("0;96m")
+    val WHITE_BRIGHT = code("0;97m")
 
-    // High Intensity
-    const val BLACK_BRIGHT: String = "\u001b[0;90m" // BLACK
-    const val RED_BRIGHT: String = "\u001b[0;91m" // RED
-    const val GREEN_BRIGHT: String = "\u001b[0;92m" // GREEN
-    const val YELLOW_BRIGHT: String = "\u001b[0;93m" // YELLOW
-    const val BLUE_BRIGHT: String = "\u001b[0;94m" // BLUE
-    const val PURPLE_BRIGHT: String = "\u001b[0;95m" // PURPLE
-    const val CYAN_BRIGHT: String = "\u001b[0;96m" // CYAN
-    const val WHITE_BRIGHT: String = "\u001b[0;97m" // WHITE
+    val BLACK_BOLD_BRIGHT = code("1;90m")
+    val RED_BOLD_BRIGHT = code("1;91m")
+    val GREEN_BOLD_BRIGHT = code("1;92m")
+    val YELLOW_BOLD_BRIGHT = code("1;93m")
+    val BLUE_BOLD_BRIGHT = code("1;94m")
+    val PURPLE_BOLD_BRIGHT = code("1;95m")
+    val CYAN_BOLD_BRIGHT = code("1;96m")
+    val WHITE_BOLD_BRIGHT = code("1;97m")
 
-    // Bold High Intensity
-    const val BLACK_BOLD_BRIGHT: String = "\u001b[1;90m" // BLACK
-    const val RED_BOLD_BRIGHT: String = "\u001b[1;91m" // RED
-    const val GREEN_BOLD_BRIGHT: String = "\u001b[1;92m" // GREEN
-    const val YELLOW_BOLD_BRIGHT: String = "\u001b[1;93m" // YELLOW
-    const val BLUE_BOLD_BRIGHT: String = "\u001b[1;94m" // BLUE
-    const val PURPLE_BOLD_BRIGHT: String = "\u001b[1;95m" // PURPLE
-    const val CYAN_BOLD_BRIGHT: String = "\u001b[1;96m" // CYAN
-    const val WHITE_BOLD_BRIGHT: String = "\u001b[1;97m" // WHITE
-
-    // High Intensity backgrounds
-    const val BLACK_BACKGROUND_BRIGHT: String = "\u001b[0;100m" // BLACK
-    const val RED_BACKGROUND_BRIGHT: String = "\u001b[0;101m" // RED
-    const val GREEN_BACKGROUND_BRIGHT: String = "\u001b[0;102m" // GREEN
-    const val YELLOW_BACKGROUND_BRIGHT: String = "\u001b[0;103m" // YELLOW
-    const val BLUE_BACKGROUND_BRIGHT: String = "\u001b[0;104m" // BLUE
-    const val PURPLE_BACKGROUND_BRIGHT: String = "\u001b[0;105m" // PURPLE
-    const val CYAN_BACKGROUND_BRIGHT: String = "\u001b[0;106m" // CYAN
-    const val WHITE_BACKGROUND_BRIGHT: String = "\u001b[0;107m" // WHITE
+    val BLACK_BACKGROUND_BRIGHT = code("0;100m")
+    val RED_BACKGROUND_BRIGHT = code("0;101m")
+    val GREEN_BACKGROUND_BRIGHT = code("0;102m")
+    val YELLOW_BACKGROUND_BRIGHT = code("0;103m")
+    val BLUE_BACKGROUND_BRIGHT = code("0;104m")
+    val PURPLE_BACKGROUND_BRIGHT = code("0;105m")
+    val CYAN_BACKGROUND_BRIGHT = code("0;106m")
+    val WHITE_BACKGROUND_BRIGHT = code("0;107m")
 }

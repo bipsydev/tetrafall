@@ -73,5 +73,5 @@ class PrettyLogger(
 inline fun <reified T : Any> PrettyLogger(): PrettyLogger {
     val full_name = T::class.java.name
     val short_name = full_name.substring(full_name.indexOfLast { it == '.' } + 1)
-    return PrettyLogger("${ANSI.WHITE}${ANSI.UNDERLINE}${ANSI.ITALIC}$short_name${ANSI.RESET}")
+    return PrettyLogger("${ANSI.GREEN_UNDERLINED}${ANSI.ITALIC}$short_name${ANSI.RESET}")
 }
