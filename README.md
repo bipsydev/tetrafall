@@ -1,12 +1,12 @@
 # TetraFall
 
-A [libGDX](https://libgdx.com/) tetris-like game.
-Initially generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+A [libGDX](https://libgdx.com/) tetris-like game written in Kotlin for desktop, web, and Android.
 
+Initially generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 This project was generated with a Kotlin project template that includes Kotlin application launchers and [KTX](https://libktx.github.io/) utilities.
 
 Assets used:
-- [FonoticBoxes by El Chucho](https://el-chucho.itch.io/fotonicboxes)
+- ![\[icon\]](https://img.itch.zone/aW1hZ2UvMTY0MDgxOS85NjUwODEwLmdpZg==/347x500/xF5Xaw.gif) [FonoticBoxes by El Chucho](https://el-chucho.itch.io/fotonicboxes)
 
 ## Platforms
 
