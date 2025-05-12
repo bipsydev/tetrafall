@@ -15,6 +15,13 @@ Assets used:
 - `android`: Android mobile platform. Needs Android SDK.
 - `teavm`: Web backend that supports most JVM languages.
 
+## Core Module Code Structure
+- `TetraFall`: The main cross-platform entrypoint of the game. Loads the game's initial state and handles unloading & exiting.
+- `GameScreen`: The main game view. Contains all of the main game logic while playing.
+- `TitleScreen`: The title screen after loading the game, with options for settings and starting the game.
+- `PrettyLogger`: A modified `ktx.log.Logger` that has pretty formatting with cross-platform compatibility.
+- `ANSI`: Works with `PrettyLogger` to define ANSI escape sequences if possible for the platform.
+
 ## Gradle
 
 This project uses [Gradle](https://gradle.org/) to manage dependencies.
