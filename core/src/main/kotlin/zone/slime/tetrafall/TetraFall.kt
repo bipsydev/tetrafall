@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
@@ -37,14 +38,50 @@ object TetraFall : KtxGame<KtxScreen>()
     val BATCH by lazy {
         SpriteBatch().also {
             LOG.debug { "Initialized global SpriteBatch TetraFall.BATCH." }
+            BATCH_RESET_PROJECTION = it.projectionMatrix.cpy()
+            LOG.debug { "\tTetraFall.BATCH.projectionMatrix has been cached." }
         }
     }
+    /** Cached initial projectionMatrix of BATCH, set after initialized. */
+    lateinit var BATCH_RESET_PROJECTION: Matrix4
 
     /** A renderer for primitive shapes. */
     val SHAPES by lazy {
         ShapeRenderer().also {
             LOG.debug { "Initialized global ShapeRenderer TetraFall.SHAPES." }
+            SHAPES_RESET_PROJECTION = it.projectionMatrix.cpy()
+            LOG.debug { "\tTetraFall.SHAPES.projectionMatrix has been cached." }
         }
+    }
+    /** Cached initial projectionMatrix of SHAPES, set after initialized. */
+    lateinit var SHAPES_RESET_PROJECTION: Matrix4
+
+    /**
+     * `setProjectionsToCamera` public utility function
+     *--------------------------------------------------
+     * Sets all rendering objects' (`BATCH`, `SHAPES`) `projectionMatrix`
+     * to the `CAMERA.combined` matrix.
+     * Essentially, this makes sprite & shape rendering appear within
+     * the world camera coordinate system.
+     */
+    fun setProjectionsToCamera() {
+        // use camera's combined projection matrix as the projection matrix
+        // of our rendering objects
+        BATCH.projectionMatrix = CAMERA.combined
+        SHAPES.projectionMatrix = CAMERA.combined
+    }
+
+    /**
+     * `resetProjections` public utility function
+     *--------------------------------------------
+     * Resets all render objects'  (`BATCH`, `SHAPES`) `projectionMatrix`
+     * to their initial screen-aligned state.
+     * Essentially, this makes the sprite & shape rendering appear
+     * on the hardware screen coordinate system.
+     */
+    fun setProjectionsToScreen() {
+        BATCH.projectionMatrix = BATCH_RESET_PROJECTION
+        SHAPES.projectionMatrix = SHAPES_RESET_PROJECTION
     }
 
     /**
@@ -113,11 +150,8 @@ object TetraFall : KtxGame<KtxScreen>()
     override fun render() {
         // update camera projection matrices based on camera position/zoom/etc
         CAMERA.update()
-
-        // use camera's combined projection matrix as the projection matrix
-        // of our rendering objects
-        BATCH.projectionMatrix = CAMERA.combined
-        SHAPES.projectionMatrix = CAMERA.combined
+        // assign camera projection to rendering objects
+        setProjectionsToCamera()
 
         // renders the current screen
         super.render()
@@ -127,10 +161,8 @@ object TetraFall : KtxGame<KtxScreen>()
         // update the viewport and camera
         // do not set camera to center of world dimensions
         VIEWPORT.update(width, height, false)
-
-        // update rendering objects' project matrices
-        BATCH.projectionMatrix = CAMERA.combined
-        SHAPES.projectionMatrix = CAMERA.combined
+        // assign camera projection to rendering objects
+        setProjectionsToCamera()
 
         super.resize(width, height) // call `resize` for current screen
     }

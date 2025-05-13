@@ -61,7 +61,7 @@ class GameScreen : KtxScreen {
     private var time: Double = 0.0
 
     /** scene active frame `render` count */
-    private var frame: Int = 0
+    private var frame: Int = -1 // increments at beginning of `render`, so -1
 
     /** the current FPS calculated from given `delta`. */
     private var fps: Double = 0.0
@@ -113,18 +113,49 @@ class GameScreen : KtxScreen {
     }
 
     /**
-     * `updateFrameData` private method
+     * `render` method override (Main rendering loop)
+     *------------------------------------------------
+     * Called every time the game needs a frame update.
+     * This is where the game should react to events, update game logic,
+     * and then render to the screen.
+     *
+     * @param delta - A `Float`, the time in seconds since the last frame.
+     *                Passed in by libGDX for us to use for the frame.
+     */
+    override fun render(delta: Float) {
+        // update time, FPS & frame count
+        updateFrameTime(delta)
+
+        // update game logic
+        update(delta)
+
+        // show "loading..." text while loading textures
+        if (!TX_FOTONICBOX_LOADED)
+        {
+            drawLoading()
+        }
+        else
+        {
+            drawRenderingTest()
+        }
+    }
+
+    /**
+     * `updateFrameTime` private method
      *----------------------------------
-     * Updates FPS, time, frame count, and other frame-time data.
+     * Updates FPS, time, and other frame-time data.
      *
      * @param delta - the time in seconds since last frame, passed by `render`.
      */
-    private fun updateFrameData(delta: Float) {
+    private fun updateFrameTime(delta: Float) {
+        // increment frame count (starts at -1, so 0 for first frame)
+        frame++
+
         // no time or frame increase on first frame
         if (frame > 0) {
             time += delta   // update scene time
-            frame++         // increase frame count
         }
+
         // update FPS calculation with new delta
         //TODO add smoothing
         val smoothingFactor: Double = 0.9
@@ -175,34 +206,6 @@ class GameScreen : KtxScreen {
     }
 
     /**
-     * `render` method override
-     *--------------------------
-     * Called every time the game needs a frame update.
-     * This is where the game should react to events, update game logic,
-     * and then render to the screen.
-     *
-     * @param delta - A `Float`, the time in seconds since the last frame.
-     *                Passed in by libGDX for us to use for the frame.
-     */
-    override fun render(delta: Float) {
-        // update time, FPS & frame count
-        updateFrameData(delta)
-
-        // update game logic
-        update(delta)
-
-        // show "loading..." text while loading textures
-        if (!TX_FOTONICBOX_LOADED)
-        {
-            drawLoading()
-        }
-        else
-        {
-            drawRenderingTest()
-        }
-    }
-
-    /**
      * `drawLoading` private method
      *--------------------------------
      * This is what is rendered while we wait for resources to load.
@@ -238,15 +241,20 @@ class GameScreen : KtxScreen {
             TF.SHAPES.color = Color.RED
             TF.SHAPES.circle(rectPos, 3f)
         }
-        // ============================= DRAW TEXT =============================
+        // ========================= DRAW TEXT (World) =========================
         TF.BATCH.use {
             //TODO use a smarter multi-line text rendering structure
             TF.FONT.data.setScale(1.25f)
             TF.FONT.color = Color.BLACK
-            TF.FONT.draw(TF.BATCH,
+            TF.FONT.draw(
+                TF.BATCH,
                 "FRAME: $frame",
-                rectPos.x, rectPos.y)
-
+                rectPos.x, rectPos.y
+            )
+        }
+        // ======================== DRAW TEXT (Screen) =========================
+        TF.setProjectionsToScreen()
+        TF.BATCH.use {
             TF.FONT.data.setScale(2f)
             TF.FONT.color = Color.RED
             TF.FONT.draw(TF.BATCH,
@@ -271,6 +279,7 @@ class GameScreen : KtxScreen {
                 "PPI X & Y: ${Gdx.graphics.ppiX}, ${Gdx.graphics.ppiY}",
                 32f, 260f)
         }
+        TF.setProjectionsToCamera()
     }
 
     /**
