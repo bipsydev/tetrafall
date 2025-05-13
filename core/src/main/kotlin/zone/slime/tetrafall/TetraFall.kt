@@ -2,14 +2,15 @@ package zone.slime.tetrafall
 
 import com.badlogic.gdx.Application.LOG_DEBUG
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.utils.viewport.ExtendViewport
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.assets.async.AssetStorage
 import ktx.async.KtxAsync
-import ktx.graphics.LetterboxingViewport
 
 /**
  *******************************************************************************
@@ -46,16 +47,36 @@ object TetraFall : KtxGame<KtxScreen>()
         }
     }
 
-    /** The global viewport that maintains an aspect ratio and PPI density. */
+    /**
+     * The world camera, for panning & zooming around the game world.
+     * Works with the VIEWPORT to send game world projections to the screen.
+     * Anything that uses a projection matrix to draw things to the screen
+     * will need to copy this camera's `combined` projection matrix
+     * whenever it's updated.
+     */
+    val CAMERA by lazy {
+        OrthographicCamera().also {
+            LOG.debug { "Initialized global OrthographicCamera TetraFall.CAMERA." }
+        }
+    }
+
+    /**
+     * The global viewport that maintains a minimum virtual world size,
+     * and extends the world view in one dimension (both directions) when
+     * aspect ratio is not the same as desired minimum.
+     * Needs to be `update`d on window resize.
+     */
     val VIEWPORT by lazy {
-        LetterboxingViewport(96f, 96f,
-                             16f / 9f).also {
-            LOG.debug { "Initialized global LetterboxingViewport TetraFall.VIEWPORT." }
+        ExtendViewport(1280f, 720f, CAMERA).also {
+            // The camera will initiate
+            CAMERA.translate(it.minWorldWidth / 2f, it.minWorldHeight / 2f)
+            LOG.debug { "Initialized global ExtendViewport TetraFall.VIEWPORT." }
         }
     }
 
     val FONT by lazy {
-        BitmapFont().also {
+        BitmapFont().apply {
+            data.scale(2f)  // double the size of the font
             LOG.debug { "Initialized global BitmapFont TetraFall.FONT." }
         }
     }
@@ -87,6 +108,41 @@ object TetraFall : KtxGame<KtxScreen>()
         addScreen(GameScreen())
         // set it as the active running screen for the game
         setScreen<GameScreen>()
+    }
+
+    override fun render() {
+        // update camera projection matrices based on camera position/zoom/etc
+        CAMERA.update()
+
+        // use camera's combined projection matrix as the projection matrix
+        // of our rendering objects
+        BATCH.projectionMatrix = CAMERA.combined
+        SHAPES.projectionMatrix = CAMERA.combined
+
+        // renders the current screen
+        super.render()
+    }
+
+    override fun resize(width: Int, height: Int) {
+        // update the viewport and camera
+        // do not set camera to center of world dimensions
+        VIEWPORT.update(width, height, false)
+
+        // update rendering objects' project matrices
+        BATCH.projectionMatrix = CAMERA.combined
+        SHAPES.projectionMatrix = CAMERA.combined
+
+        super.resize(width, height) // call `resize` for current screen
+    }
+
+    override fun dispose() {
+        // dispose of all screens stored in our cache
+        super.dispose()
+
+        // dispose of ASSETS manager (on current thread, blocking)
+        ASSETS.dispose()
+        LOG.debug { "AssetStorage disposed of successfully." }
+        LOG.debug { "Exiting game..." }
     }
 }
 

@@ -44,19 +44,19 @@ class PrettyLogger(
      */
     override fun buildMessage(message: String): String {
         // get the index of first non-tab
-        val first_non_tab = message.indexOfFirst { it != '\t' }
+        val firstNonTab = message.indexOfFirst { it != '\t' }
             // should be 0 if not found
             .let { if (it == -1) 0 else it }
 
         // substring of only tabs from beginning
-        val tabs = message.substring(0, first_non_tab)
+        val tabs = message.substring(0, firstNonTab)
 
         // leading tabs are stripped away
-        val message_stripped = message.substring(first_non_tab)
+        val messageStripped = message.substring(firstNonTab)
 
         // will show up like this:
         // "[tabs][tag] [returned_message]"
-        return "$tabs${ANSI.ITALIC}<${ANSI.RESET}$name${ANSI.ITALIC}>${ANSI.RESET} $message_stripped"
+        return "$tabs${ANSI.ITALIC}<${ANSI.RESET}$name${ANSI.ITALIC}>${ANSI.RESET} $messageStripped"
     }
 }
 
