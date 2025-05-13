@@ -78,6 +78,12 @@ object TetraFall : KtxGame<KtxScreen>()
      * to their initial screen-aligned state.
      * Essentially, this makes the sprite & shape rendering appear
      * on the hardware screen coordinate system.
+     * TODO:
+     *   Currently this stretches everything if the initial window size
+     *   is changed, since this simply copies from its cached original
+     *   projection matrix when the window was it's initial size.
+     *   We need a new `Matrix4` that can represent the new window size,
+     *   while keeping the "extended" centered effect.
      */
     fun setProjectionsToScreen() {
         BATCH.projectionMatrix = BATCH_RESET_PROJECTION
