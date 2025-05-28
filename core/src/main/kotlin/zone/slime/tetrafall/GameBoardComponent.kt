@@ -1,7 +1,6 @@
 package zone.slime.tetrafall
 
 import com.artemis.Component
-import ktx.collections.GdxArray
 import ktx.collections.GdxIntArray
 
 /**
