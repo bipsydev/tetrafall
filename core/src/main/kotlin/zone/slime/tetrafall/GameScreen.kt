@@ -92,7 +92,6 @@ class GameScreen : KtxScreen {
     /** The World, contains Systems which process Components in Entities. */
     val world: World = World(   // World constructor takes a WorldConfiguration
         WorldConfigurationBuilder()
-            //TODO: Exception in thread "main" java.lang.NullPointerException: Aspect was null and no aspect annotations set on system (@All); to use systems which do not subscribe to entities, extend BaseSystem directly.
             .with(GameBoardSystem())
             .build()
     )
