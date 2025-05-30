@@ -1,18 +1,21 @@
 package zone.slime.tetrafall
 
 import com.artemis.systems.IteratingSystem
+import ktx.artemis.allOf
 
 /**
  *******************************************************************************
  * `GameBoardSystem` class (Artemis Entity-Iterating System)
  *******************************************************************************
  * Processes entities based on ID.
+ * Subscribes to an `Aspect` that matches just `GameBoardComponent`.
  */
-class GameBoardSystem : IteratingSystem() {
-
+class GameBoardSystem : IteratingSystem(ASPECT) {
     companion object {
         /** Logger for the `GameBoardSystem`. */
-        private val LOG by lazy { PrettyLogger<GameScreen>() }
+        private val LOG by lazy { PrettyLogger<GameBoardSystem>() }
+
+        private val ASPECT = allOf(GameBoardComponent::class)
     }
 
     override fun initialize() {

@@ -1,7 +1,8 @@
 package zone.slime.tetrafall
 
+import com.artemis.World
+import com.artemis.WorldConfigurationBuilder
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -12,7 +13,6 @@ import ktx.graphics.circle
 import ktx.graphics.use
 
 import kotlinx.coroutines.launch
-import kotlin.math.min
 
 import zone.slime.tetrafall.TetraFall as TF
 
@@ -73,6 +73,30 @@ class GameScreen : KtxScreen {
     /** Position to draw the floating square + frame number text. */
     private var rectPos: Vector2 = Vector2(0f, 0f)
 
+    /* Using artemis-odb with libKTX via `ktx.artemis`
+     * basic usage is like this:
+     * create a World (having Systems) that will hold Entities
+     * Entities are a container of Components
+     * Components are pure data classes for specific logical elements
+     * Systems process the Components of each Entity during World execution
+     */
+
+
+    /*
+     * What Systems do we need?
+     * GameBoardSystem - process inputs, update player controlled piece
+     * UISystem - updates score & interface display
+     *
+     */
+
+    /** The World, contains Systems which process Components in Entities. */
+    val world: World = World(   // World constructor takes a WorldConfiguration
+        WorldConfigurationBuilder()
+            //TODO: Exception in thread "main" java.lang.NullPointerException: Aspect was null and no aspect annotations set on system (@All); to use systems which do not subscribe to entities, extend BaseSystem directly.
+            .with(GameBoardSystem())
+            .build()
+    )
+
     /**
      * GameScreen initialization block
      * --------------------------------
@@ -123,6 +147,7 @@ class GameScreen : KtxScreen {
      *                Passed in by libGDX for us to use for the frame.
      */
     override fun render(delta: Float) {
+
         // update time, FPS & frame count
         updateFrameTime(delta)
 
@@ -136,8 +161,13 @@ class GameScreen : KtxScreen {
         }
         else
         {
-            drawRenderingTest()
+            //drawRenderingTest()
+            //world.draw()
+            LOG.debug { "World.draw called (kinda)" }
         }
+
+        LOG.debug { "--- End of `render` frame #$frame ---\n" }
+
     }
 
     /**
@@ -186,21 +216,24 @@ class GameScreen : KtxScreen {
 
         // if we have our textures loaded...
         if (TX_FOTONICBOX_LOADED) {
+//
+//            // calculate some things into private properties (render data)
+//            dims = Vector2(TF.VIEWPORT.minWorldWidth,
+//                           TF.VIEWPORT.minWorldHeight)
+//            dimMin = min(dims.x, dims.y)
+//            rectPos = Vector2(frame/4.5f, frame/8f)
+//
+//            // pan camera based on delta mouse pos (movement)
+//            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+//                TF.CAMERA.translate(
+//                    -Gdx.input.deltaX.toFloat(),
+//                    Gdx.input.deltaY.toFloat()
+//                )
+//            }
 
-            // calculate some things into private properties (render data)
-            dims = Vector2(TF.VIEWPORT.minWorldWidth,
-                           TF.VIEWPORT.minWorldHeight)
-            dimMin = min(dims.x, dims.y)
-            rectPos = Vector2(frame/4.5f, frame/8f)
-
-            // pan camera based on delta mouse pos (movement)
-            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                TF.CAMERA.translate(
-                    -Gdx.input.deltaX.toFloat(),
-                    Gdx.input.deltaY.toFloat()
-                )
-            }
-
+            LOG.debug { "world.process() being called here..." }
+            world.setDelta(delta)
+            world.process()
         }
 
     }
@@ -280,15 +313,6 @@ class GameScreen : KtxScreen {
                 32f, 260f)
         }
         TF.setProjectionsToCamera()
-    }
-
-    /**
-     * `drawGame` private method
-     *---------------------------
-     * This draws the actual game.
-     */
-    private fun drawGame() {
-
     }
 
     /**
