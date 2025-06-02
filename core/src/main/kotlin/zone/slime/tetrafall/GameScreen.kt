@@ -85,14 +85,14 @@ class GameScreen : KtxScreen {
     /*
      * What Systems do we need?
      * GameBoardSystem - process inputs, update player controlled piece
-     * UISystem - updates score & interface display
+     * GameBoardRenderSystem - renders the game board, tetromino pieces, and UI.
      *
      */
 
     /** The World, contains Systems which process Components in Entities. */
-    val world: World = World(   // World constructor takes a WorldConfiguration
+    private val world: World = World(   // World constructor takes a WorldConfiguration
         WorldConfigurationBuilder()
-            .with(GameBoardSystem())
+            .with(GameBoardSystem(), GameBoardRenderSystem())
             .build()
     )
 
